@@ -6,3 +6,5 @@ fastapi
 uvicorn
 cassandra-driver
 requests
+mysqlclient
+psycopg2

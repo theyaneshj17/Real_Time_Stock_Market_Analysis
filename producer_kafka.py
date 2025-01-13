@@ -37,7 +37,7 @@ def generate_stock_data(ticker, kafka_brokers, kafka_topic, iterations, interval
     
     # Generate and send stock data in a loop
     counter = 0
-    while counter <= iterations:
+    while True:
         # Fetch the latest stock data
         stock_data = get_stock_data(ticker)
         

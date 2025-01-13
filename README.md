@@ -4,6 +4,14 @@
 
 This project demonstrates how to analyze Amazon's stock market data in real-time. The real-time stock data is fetched using Yahoo Finance's yfinance API, streamed via Kafka, stored in a PostgreSQL database, and visualized using Apache Superset. This setup allows you to observe trends and make informed decisions based on live stock data.
 
+
+
+<p align="center">
+  <img src="./results/Chart.png" alt="lal">
+</p>
+
+
+
 ### Key Technologies:
 - **Yahoo Finance API**: Fetches live stock data.
 - **Kafka**: Handles real-time data streaming.
@@ -98,12 +106,6 @@ Data inserted into PostgreSQL.
 
 <p align="center">
   <img src="./results/consumerdata.png" alt="lal">
-</p>
-
-Superset Dashboard Screenshots:
-
-<p align="center">
-  <img src="./results/Chart.png" alt="lal">
 </p>
 
 

@@ -1,2 +1,8 @@
 yfinance
 kafka-python
+pyspark
+redis
+fastapi
+uvicorn
+cassandra-driver
+requests

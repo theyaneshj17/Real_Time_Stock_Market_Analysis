@@ -1,40 +1,82 @@
-
-
+version: "2"
 services:
-
   zookeeper:
-    image: confluentinc/cp-zookeeper
+    image: confluentinc/cp-zookeeper:6.1.1
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 2181:2181
+      - 22181:2181
 
-    volumes:
-      - zookeeper_data:/var/lib/zookeeper
-
-  kafka1:
-    image: confluentinc/cp-kafka
-    restart: "no"
-    links:
+  kafka_12:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
       - zookeeper
     ports:
-      - 9092:9092
+      - 29092:29092
+      - 29093:29093
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_12:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_EXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-      KAFKA_LISTENERS: INTERNAL://:29092,EXTERNAL://:9092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:29092,EXTERNAL://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
     volumes:
-      - kafka1_data:/var/lib/kafka/data
+      - metadata_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=FoolishPassword
+      - POSTGRES_USER=druid
+      - POSTGRES_DB=druid
 
 
+
+
+
+  cassandra_db:
+    image: cassandra:latest
+    container_name: cassandra1
+    hostname: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+      - CASSANDRA_USERNAME=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+      # Add these for better network configuration
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra_db
+      - CASSANDRA_LISTEN_ADDRESS=0.0.0.0
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - stock_market_net
+    
+networks:
+  stock_market_net:
+    driver: bridge
+
+    
 volumes:
-  zookeeper_data:
-  kafka1_data:
+  postgresql_data:
+  coordinator_var:
+  broker_var:
+  historical_var:
+  middle_var:
+  router_var:
+  druid_shared:
+  overlord_var:
+  metadata_data:
+  cassandra_data:

@@ -1,0 +1,39 @@
+{
+    "type": "kafka",
+    "dataSource": "stockprice",  
+    "intervals": ["2025-01-01/2025-12-31"],  
+    "firehose": {
+      "type": "kafka",
+      "consumerProperties": {
+        "bootstrap.servers": "localhost:9092",  
+        "group.id": "stockprice-consumer", 
+        "auto.offset.reset": "earliest"  
+      },
+      "topic": "stockprice" 
+    },
+    "parser": {
+      "type": "json",  
+      "flattenSpec": {
+        "useFieldDiscovery": true
+      }
+    },
+    "timestampSpec": {
+      "column": "timestamp",  
+      "format": "iso"  
+    },
+    "dimensionsSpec": {
+      "dimensions": ["symbol", "company", "market", "price"]  
+    },
+    "metricsSpec": [
+      {
+        "name": "price",
+        "type": "doubleSum"  
+      }
+    ],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "hour", 
+      "queryGranularity": "minute"  
+    }
+  }
+  

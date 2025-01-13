@@ -11,9 +11,10 @@ import six
 def get_stock_data(ticker):
     stock_data = {}
     stock = yf.Ticker(ticker)
-    stock_data["Price"] = stock.fast_info.last_price  # Current price of the stock
-    stock_data["Name"] = ticker  # Stock's ticker name
-    stock_data["Timestamp"] = round(time.time() * 1000)  # Current timestamp in milliseconds
+    stock_data["price"] = stock.fast_info.last_price  # Changed from "Price" to "price"
+    stock_data["symbol"] = ticker  # Changed from "Name" to "symbol"
+    stock_data["company"] = ticker  # Added company field
+    stock_data["market"] = "NASDAQ"  # Added market field
     return stock_data
 
 # Function to send stock data to Kafka
@@ -57,7 +58,7 @@ def generate_stock_data(ticker, kafka_brokers, kafka_topic, iterations, interval
 if __name__ == '__main__':
     
     ticker = "AMZN"  # Set the ticker symbol for Amazon
-    kafka_brokers = "localhost:9092"  # Kafka brokers
+    kafka_brokers = "localhost:29092"  # Kafka brokers
     kafka_topic = 'stockprice'  # Kafka topic to send the data
     iterations = 20  # Number of iterations (number of stock price fetches)
     interval = 12  # Time interval between iterations (in seconds)

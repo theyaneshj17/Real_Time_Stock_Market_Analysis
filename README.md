@@ -81,6 +81,34 @@ Once the connection is made, create charts based on the stock data.
 Build dashboards to visualize the stock trends, such as price over time, volume analysis, etc.
 
 
+## Results
+
+
+
+Producer Data (Terminal):
+
+
+<p align="center">
+  <img src="./results/producerdata.png" alt="lal">
+</p>
+
+Consumer Data (Terminal):
+
+Data inserted into PostgreSQL.
+
+<p align="center">
+  <img src="./results/consumerdata.png" alt="lal">
+</p>
+
+Superset Dashboard Screenshots:
+
+<p align="center">
+  <img src="./results/Chart.png" alt="lal">
+</p>
+
+
+
+
 ## Conclusion
 This project allows for real-time analysis of Amazon's stock market data using modern tools like Kafka, PostgreSQL, and Apache Superset. By following this guide, you can set up a pipeline for live data streaming, store it for further analysis, and visualize it using interactive dashboards.
 
